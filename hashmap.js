@@ -1,6 +1,7 @@
 class HashMap {
-    constructor() {
+    constructor(loadFactor) {
         this.buckets = [];
+        this.loadFactor = loadFactor || 0.75;
     }
 
     // From Odin
@@ -13,5 +14,41 @@ class HashMap {
         }
 
         return hashCode;
+    }
+
+    set(key, value) {
+
+    }
+
+    get(key) {
+
+    }
+
+    has(key) {
+
+    }
+
+    remove(key) {
+
+    }
+
+    length() {
+
+    }
+
+    clear() {
+
+    }
+
+    keys() {
+
+    }
+
+    values() {
+
+    }
+
+    entries() {
+        
     }
 }
