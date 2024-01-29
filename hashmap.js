@@ -4,7 +4,7 @@ class HashMap {
         this.loadFactor = loadFactor || 0.75;
     }
 
-    // From Odin
+    // From Odin https://www.theodinproject.com/lessons/javascript-hashmap-data-structure#collisions
     hash(key) {
         let hashCode = 0;
 
@@ -14,6 +14,14 @@ class HashMap {
         }
 
         return hashCode;
+    }
+
+    // Artificial index limitation
+    // From Odin https://www.theodinproject.com/lessons/javascript-hashmap
+    checkBounds(index) {
+        if (index < 0 || index >= buckets.length) {
+            throw new Error("Trying to access index out of bound");
+        }
     }
 
     set(key, value) {
@@ -49,6 +57,6 @@ class HashMap {
     }
 
     entries() {
-        
+
     }
 }
