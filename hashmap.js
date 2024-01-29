@@ -37,11 +37,13 @@ class HashMap {
     }
 
     get(key) {
-
+        const bucket = this.#calculateBucket(key);
+        return this.buckets[bucket];
     }
 
     has(key) {
-
+        const bucket = this.#calculateBucket(key);
+        return this.buckets[bucket] !== null;
     }
 
     remove(key) {
