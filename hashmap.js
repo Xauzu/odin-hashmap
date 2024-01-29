@@ -18,14 +18,22 @@ class HashMap {
 
     // Artificial index limitation
     // From Odin https://www.theodinproject.com/lessons/javascript-hashmap
-    checkBounds(index) {
+    #checkBounds(index) {
         if (index < 0 || index >= buckets.length) {
             throw new Error("Trying to access index out of bound");
         }
     }
 
-    set(key, value) {
+    #calculateBucket(key) {
+        const bucket = hash(key) % this.buckets.length;
+        this.#checkBounds(bucket);
 
+        return bucket;
+    }
+
+    set(key, value) {
+        const bucket = this.#calculateBucket(key);
+        this.buckets[bucket] = value;
     }
 
     get(key) {
