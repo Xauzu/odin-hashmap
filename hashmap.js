@@ -99,7 +99,16 @@ class HashMap {
 
     remove(key) {
         const bucket = this.#verifyBucket(key);
-        this.buckets[bucket] = null;
+        if (this.buckets[bucket] && this.buckets[bucket].length > 0) {
+            for (let i = 0; i < this.buckets[bucket].length; i++) {
+                const k = this.buckets[bucket][i][0];
+                if (k === key) {
+                    this.buckets[bucket].splice(i, 1);
+                    break;
+                }
+            }
+        }
+        return false
     }
 
     length() {
