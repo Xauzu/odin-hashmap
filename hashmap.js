@@ -74,18 +74,25 @@ class HashMap {
 
     set(key, value) {
         const kvPair = this.#kvPair(key);
-        kvPair[0] = key;
-        kvPair[1] = value;
+        if (kvPair.length > 0) {
+            kvPair[0] = key;
+            kvPair[1] = value;
+        }
+        else 
+            kvPair.push([key, value]);
     }
 
     get(key) {
         const kvPair = this.#kvPair(key);
-        return kvPair[1];
+        let result = null;
+        if (kvPair.length > 0)
+            result = kvPair[1];
+        return result;
     }
 
     has(key) {
         const kvPair = this.#kvPair(key);
-        let result = false;
+        let results = false;
         if (kvPair.length > 0) results = true; 
         return results;
     }
