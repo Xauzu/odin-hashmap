@@ -25,9 +25,7 @@ class HashMap {
     }
 
     #resizeBucketList() {
-        let count = 0;
-        for (let i = 0; i < this.buckets.length; i++) 
-            if (this.buckets[i]) count++;
+        const count = this.length();
 
         if (count >= this.buckets.length * this.loadFactor) {
             // Expand
@@ -71,7 +69,11 @@ class HashMap {
     }
 
     length() {
+        let count = 0;
+        for (let i = 0; i < this.buckets.length; i++) 
+            if (this.buckets[i]) count++;
 
+        return count;
     }
 
     clear() {
