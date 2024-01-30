@@ -66,22 +66,22 @@ class HashMap {
 
     remove(key) {
         const bucket = this.#verifyBucket(key);
+        this.buckets[bucket] = null;
     }
 
     length() {
         let count = 0;
-        for (let i = 0; i < this.buckets.length; i++) 
+        for (let i = 0; i < this.buckets.length; i++)
             if (this.buckets[i]) count++;
 
         return count;
     }
 
     clear() {
-
+        this.buckets = [];
     }
 
     keys() {
-
     }
 
     values() {
