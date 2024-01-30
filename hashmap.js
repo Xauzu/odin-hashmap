@@ -128,8 +128,10 @@ class HashMap {
     keys() {
         const keys = []
         for (let i = 0; i < this.buckets.length; i++)
-            if (this.buckets[o])    
-                keys.push(i);
+            if (this.buckets[i]) 
+                for (let j = 0; j < this.buckets[i].length; j++)
+                    if (this.buckets[i][j])
+                        keys.push(this.buckets[i][j][0]);   
         
         return keys;
     }
@@ -137,18 +139,20 @@ class HashMap {
     values() {
         const values = []
         for (let i = 0; i < this.buckets.length; i++)
-            if (this.buckets[o])    
-                values.push(this.buckets[i]);
+            if (this.buckets[i]) 
+                for (let j = 0; j < this.buckets[i].length; j++)
+                    if (this.buckets[i][j])
+                        values.push(this.buckets[i][j][1]);    
         
         return values;
     }
 
     entries() {
-        let temp = [];
+        let entries = [];
         for (let i = 0; i < this.buckets.length; i++)
-            if (this.buckets[i]) temp = [...temp, ...this.buckets[i]];
+            if (this.buckets[i] && this.buckets[i].length > 0) entries = [...entries, ...this.buckets[i]];
         
-        return temp;
+        return entries;
     }
 }
 
