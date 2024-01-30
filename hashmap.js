@@ -104,11 +104,11 @@ class HashMap {
                 const k = this.buckets[bucket][i][0];
                 if (k === key) {
                     this.buckets[bucket].splice(i, 1);
-                    return true
+                    return true;
                 }
             }
         }
-        return false
+        return false;
     }
 
     length() {
