@@ -84,8 +84,10 @@ class HashMap {
     }
 
     has(key) {
-        const bucket = this.#verifyBucket(key);
-        return this.buckets[bucket] ? true : false;
+        const kvPair = this.#kvPair(key);
+        let result = false;
+        if (kvPair.length > 0) results = true; 
+        return results;
     }
 
     remove(key) {
