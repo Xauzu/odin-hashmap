@@ -18,24 +18,24 @@ class HashMap {
 
     // Artificial index limitation
     // From Odin https://www.theodinproject.com/lessons/javascript-hashmap
-    #checkBounds(index) {
-        if (index < 0 || index >= this.buckets.length) {
+    #checkBounds(index, length = this.buckets.length) {
+        if (index < 0 || index >= length) {
             throw new Error("Trying to access index out of bound");
         }
     }
 
-    #resizeBucketList() {
+    #resizeBucketList(length) {
         let count = 0;
         for (let i = 0; i < this.buckets.length; i++)
             if (this.buckets[i]) count++;
 
         if (count >= this.buckets.length * this.loadFactor) {
             // Expand
-            const newLength = this.buckets.length * 2;
+            const newLength = length || this.buckets.length * 2;
             const tempBucket = [...Array(newLength)];
             
             // Recalculate key hash assignments
-            const entries = entries();
+            const entries = this.entries();
             for (let i = 0; i < entries.length; i++) {
                 const bucket = this.#verifyBucket(entries[i][0], newLength);
                 tempBucket[bucket] = entries[i][1];
@@ -48,7 +48,7 @@ class HashMap {
     #verifyBucket(key, length = this.buckets.length) {
         if (length === this.buckets.length) this.#resizeBucketList();
         const bucket = this.hash(key) % length;
-        this.#checkBounds(bucket);
+        this.#checkBounds(bucket, length);
         return bucket;
     }
 
@@ -56,7 +56,7 @@ class HashMap {
         const bucket = this.#verifyBucket(key);
 
         let results = [];
-        if (this.buckets[bucket]) {
+        if (this.buckets[bucket] && this.buckets[bucket].length > 0) {
             for (let i = 0; i < this.buckets[bucket].length; i++) {
                 const k = this.buckets[bucket][i][0];
                 if (k === key) {
@@ -66,8 +66,7 @@ class HashMap {
             }
         }
         else {
-            this.buckets[bucket] = [];
-            results = this.buckets[bucket];
+            this.buckets[bucket] = results;
         }
         return results;
     }
@@ -78,8 +77,9 @@ class HashMap {
             kvPair[0] = key;
             kvPair[1] = value;
         }
-        else 
+        else {
             kvPair.push([key, value]);
+        }
     }
 
     get(key) {
@@ -105,7 +105,9 @@ class HashMap {
     length() {
         let count = 0;
         for (let i = 0; i < this.buckets.length; i++)
-            if (this.buckets[i]) count++;
+            if (this.buckets[i]) 
+                for (let j = 0; j < this.buckets[i].length; j++) 
+                    if (this.buckets[i][j]) count++;
 
         return count;
     }
