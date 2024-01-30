@@ -1,6 +1,6 @@
 class HashMap {
     constructor(loadFactor) {
-        this.buckets = [];
+        this.buckets = [...Array(16)];
         this.loadFactor = loadFactor || 0.75;
     }
 
@@ -24,30 +24,50 @@ class HashMap {
         }
     }
 
-    #calculateBucket(key) {
-        const bucket = hash(key) % this.buckets.length;
-        this.#checkBounds(bucket);
+    #resizeBucketList() {
+        let count = 0;
+        for (let i = 0; i < this.buckets.length; i++) 
+            if (this.buckets[i]) count++;
 
+        if (count >= this.buckets.length * this.loadFactor) {
+            // Expand
+            const newLength = this.buckets.length * 2;
+            const tempBucket = [...Array(newLength)];
+            
+            // Recalculate key hash assignments
+            const entries = entries();
+            for (let i = 0; i < entries.length; i++) {
+                const bucket = this.#verifyBucket(entries[i][0], newLength);
+                tempBucket[bucket] = entries[i][1];
+            }
+
+            this.buckets = tempBucket;
+        }
+    }
+
+    #verifyBucket(key, length = this.buckets.length) {
+        const bucket = hash(key) % length;
+        this.#checkBounds(bucket);
         return bucket;
     }
 
     set(key, value) {
-        const bucket = this.#calculateBucket(key);
+        const bucket = this.#verifyBucket(key);
         this.buckets[bucket] = value;
     }
 
     get(key) {
-        const bucket = this.#calculateBucket(key);
+        const bucket = this.#verifyBucket(key);
         return this.buckets[bucket];
     }
 
     has(key) {
-        const bucket = this.#calculateBucket(key);
-        return this.buckets[bucket] !== null;
+        const bucket = this.#verifyBucket(key);
+        return this.buckets[bucket] ? true : false;
     }
 
     remove(key) {
-
+        const bucket = this.#verifyBucket(key);
     }
 
     length() {
