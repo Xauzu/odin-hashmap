@@ -19,7 +19,7 @@ class HashMap {
     // Artificial index limitation
     // From Odin https://www.theodinproject.com/lessons/javascript-hashmap
     #checkBounds(index) {
-        if (index < 0 || index >= buckets.length) {
+        if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bound");
         }
     }
@@ -47,26 +47,40 @@ class HashMap {
 
     #verifyBucket(key, length = this.buckets.length) {
         if (length === this.buckets.length) this.#resizeBucketList();
-        const bucket = hash(key) % length;
+        const bucket = this.hash(key) % length;
         this.#checkBounds(bucket);
         return bucket;
     }
 
-    set(key, value) {
+    #kvPair(key) {
         const bucket = this.#verifyBucket(key);
 
+        let results = [];
         if (this.buckets[bucket]) {
             for (let i = 0; i < this.buckets[bucket].length; i++) {
                 const k = this.buckets[bucket][i][0];
-                if (k === key)
-                    this.buckets[bucket][i][1] = value;
+                if (k === key) {
+                    results = this.buckets[bucket][i];
+                    break;
+                }
             }
         }
+        else {
+            this.buckets[bucket] = [];
+            results = this.buckets[bucket];
+        }
+        return results;
+    }
+
+    set(key, value) {
+        const kvPair = this.#kvPair(key);
+        kvPair[0] = key;
+        kvPair[1] = value;
     }
 
     get(key) {
-        const bucket = this.#verifyBucket(key);
-        return this.buckets[bucket];
+        const kvPair = this.#kvPair(key);
+        return kvPair[1];
     }
 
     has(key) {
@@ -110,6 +124,12 @@ class HashMap {
     }
 
     entries() {
-
+        let temp = [];
+        for (let i = 0; i < this.buckets.length; i++)
+            if (this.buckets[i]) temp = [...temp, ...this.buckets[i]];
+        
+        return temp;
     }
 }
+
+module.exports = HashMap;
