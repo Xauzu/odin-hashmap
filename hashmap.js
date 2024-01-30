@@ -46,6 +46,7 @@ class HashMap {
     }
 
     #verifyBucket(key, length = this.buckets.length) {
+        if (length === this.buckets.length) this.#resizeBucketList();
         const bucket = hash(key) % length;
         this.#checkBounds(bucket);
         return bucket;
@@ -53,7 +54,14 @@ class HashMap {
 
     set(key, value) {
         const bucket = this.#verifyBucket(key);
-        this.buckets[bucket] = value;
+
+        if (this.buckets[bucket]) {
+            for (let i = 0; i < this.buckets[bucket].length; i++) {
+                const k = this.buckets[bucket][i][0];
+                if (k === key)
+                    this.buckets[bucket][i][1] = value;
+            }
+        }
     }
 
     get(key) {
