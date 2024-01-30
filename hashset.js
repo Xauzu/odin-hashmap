@@ -52,15 +52,15 @@ class HashSet {
         return bucket;
     }
 
-    #kvPair(key) {
+    #checkKey(key) {
         const bucket = this.#verifyBucket(key);
 
         let results = [];
         if (this.buckets[bucket] && this.buckets[bucket].length > 0) {
             for (let i = 0; i < this.buckets[bucket].length; i++) {
-                const k = this.buckets[bucket][i][0];
+                const k = this.buckets[bucket][i];
                 if (k === key) {
-                    results = this.buckets[bucket][i];
+                    results = [this.buckets[bucket][i]];
                     break;
                 }
             }
@@ -71,29 +71,28 @@ class HashSet {
         return results;
     }
 
-    set(key, value) {
-        const kvPair = this.#kvPair(key);
-        if (kvPair.length > 0) {
-            kvPair[0] = key;
-            kvPair[1] = value;
+    set(key) {
+        const checkKey = this.#checkKey(key);
+        if (checkKey.length > 0) {
+            checkKey[0] = key;
         }
         else {
-            kvPair.push([key, value]);
+            checkKey.push(key);
         }
     }
 
     get(key) {
-        const kvPair = this.#kvPair(key);
+        const checkKey = this.#checkKey(key);
         let result = null;
-        if (kvPair.length > 0)
-            result = kvPair[1];
+        if (checkKey.length > 0)
+            result = checkKey;
         return result;
     }
 
     has(key) {
-        const kvPair = this.#kvPair(key);
+        const checkKey = this.#checkKey(key);
         let results = false;
-        if (kvPair.length > 0) results = true; 
+        if (checkKey.length > 0) results = true; 
         return results;
     }
 
@@ -101,14 +100,14 @@ class HashSet {
         const bucket = this.#verifyBucket(key);
         if (this.buckets[bucket] && this.buckets[bucket].length > 0) {
             for (let i = 0; i < this.buckets[bucket].length; i++) {
-                const k = this.buckets[bucket][i][0];
+                const k = this.buckets[bucket][i];
                 if (k === key) {
                     this.buckets[bucket].splice(i, 1);
-                    return true
+                    return true;
                 }
             }
         }
-        return false
+        return false;
     }
 
     length() {
@@ -131,20 +130,9 @@ class HashSet {
             if (this.buckets[i]) 
                 for (let j = 0; j < this.buckets[i].length; j++)
                     if (this.buckets[i][j])
-                        keys.push(this.buckets[i][j][0]);   
+                        keys.push(this.buckets[i][j]);   
         
         return keys;
-    }
-
-    values() {
-        const values = []
-        for (let i = 0; i < this.buckets.length; i++)
-            if (this.buckets[i]) 
-                for (let j = 0; j < this.buckets[i].length; j++)
-                    if (this.buckets[i][j])
-                        values.push(this.buckets[i][j][1]);    
-        
-        return values;
     }
 
     entries() {
