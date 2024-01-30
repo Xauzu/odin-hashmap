@@ -25,7 +25,9 @@ class HashMap {
     }
 
     #resizeBucketList() {
-        const count = this.length();
+        let count = 0;
+        for (let i = 0; i < this.buckets.length; i++)
+            if (this.buckets[i]) count++;
 
         if (count >= this.buckets.length * this.loadFactor) {
             // Expand
@@ -78,14 +80,25 @@ class HashMap {
     }
 
     clear() {
-        this.buckets = [];
+        this.buckets = [...Array(16)];
     }
 
     keys() {
+        const keys = []
+        for (let i = 0; i < this.buckets.length; i++)
+            if (this.buckets[o])    
+                keys.push(i);
+        
+        return keys;
     }
 
     values() {
-
+        const values = []
+        for (let i = 0; i < this.buckets.length; i++)
+            if (this.buckets[o])    
+                values.push(this.buckets[i]);
+        
+        return values;
     }
 
     entries() {
